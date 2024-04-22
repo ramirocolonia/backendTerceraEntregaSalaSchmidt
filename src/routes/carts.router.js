@@ -1,5 +1,6 @@
 import { Router } from "express";
 import CartController from "../controllers/cart.controller.js";
+import { passportCall } from "../utils.js";
 
 const cartsRouter = Router();
 const {
@@ -9,8 +10,9 @@ const {
   removeProductFromCart,
   updateCartItems,
   updateQuantityItemCart,
-  removeAllProductsFromCart
-} = new CartController;
+  removeAllProductsFromCart,
+  createTicket
+} = new CartController();
 
 cartsRouter.post("/api/carts", newCart);
 cartsRouter.get("/api/carts/:cid", loadCart);
@@ -19,5 +21,6 @@ cartsRouter.delete("/api/carts/:cid/products/:pid", removeProductFromCart);
 cartsRouter.put("/api/carts/:cid", updateCartItems);
 cartsRouter.put("/api/carts/:cid/products/:pid", updateQuantityItemCart);
 cartsRouter.delete("/api/carts/:cid", removeAllProductsFromCart);
+cartsRouter.post("/:cid/purchase", passportCall("jwt", ["USER"]), createTicket);
 
 export default cartsRouter;

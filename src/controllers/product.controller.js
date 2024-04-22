@@ -6,8 +6,8 @@ class ProductController {
     try {
       let query = {};
       let order = {
-        limit: parseInt(req.query.limit) || 10,
-        page: parseInt(req.query.page) || 1,
+        limit: req.query.limit? parseInt(req.query.limit) : 10,
+        page: req.query.page? parseInt(req.query.page) : 1,
       };
       if (parseInt(req.query.stock))
         query.stock = { $gte: parseInt(req.query.stock) };

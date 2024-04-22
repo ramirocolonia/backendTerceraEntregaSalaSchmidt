@@ -30,6 +30,11 @@ export default class ProductRepository{
     return result; 
   }
 
+  updateManyProducts = async(products) =>{
+    const result = await this.dao.updateManyProducts(products);
+    return result; 
+  }
+
   deleteProduct = async(product) =>{
     const result = await this.dao.deleteProduct(product);
     return result;

@@ -1,4 +1,4 @@
-import { cartService, productService } from "../repositories/index.js";
+import { cartService, productService, ticketService } from "../repositories/index.js";
 
 class CartController {
 
@@ -141,6 +141,46 @@ class CartController {
       res.send({ status: "error", message: "Error en ejecución, " + error });
     }
   };
+
+  createTicket = async (req, res) =>{
+    try {
+      const user = req.user.usrDTO;
+      const cart = await cartService.findOneCart(user.cart);
+      let productsTicket = [];
+      let totalAmount = 0;
+      cart.products.forEach(prod => {
+        if(prod.product.stock >= prod.quantity){
+          // productsOrder.push(prod);
+          prod.product.stock = prod.product.stock - prod.quantity;
+          totalAmount += (prod.product.price * prod.quantity);
+          productsTicket.push(prod);
+          cart.products.pull(prod);
+        }
+      });
+      console.log("CART " + cart);
+      console.log("TOTAL AMOUNT " + totalAmount);
+      console.log("PRODUCTS A ORDEN " + productsTicket);
+      await cartService.updateCart(cart);
+      await productService.updateManyProducts(productsTicket);
+      // let productsOrder = cart.products.filter((prod) => prod.product.stock >= prod.quantity);
+      // let totalAmount = productsOrder.reduce((acc, prev) => {
+      //   acc += (prev.product.price * prev.quantity);
+      //   return acc;
+      // },0);
+      const ticketCode = Date.now + Math.floor(Math.random() * 1000 + 1);
+      let ticket = {
+        code: ticketCode,
+        amount: totalAmount,
+        purchaser: user.email
+      }
+      const result = ticketService.createTicket(ticket);
+      if(result){
+        res.send({ status: "success", payload: result });
+      }
+    } catch (error) {
+      res.send({ status: "error", message: "Error en ejecución, " + error });
+    }
+  }
   
 }
 

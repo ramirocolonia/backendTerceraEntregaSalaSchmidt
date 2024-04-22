@@ -29,6 +29,11 @@ class ProductMongo {
     return result; 
   }
 
+  async updateManyProducts(products){
+    const result = await productModel.updateMany(products);
+    return result;
+  }
+
   async deleteProduct(product){
     const result = await productModel.updateOne({_id: product._id}, {status: !product.status});
     return result;

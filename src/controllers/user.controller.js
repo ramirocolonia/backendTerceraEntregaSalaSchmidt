@@ -24,6 +24,7 @@ class UserController {
           )
         ) {
           const result = await userService.createUser(newUser);
+          
           if (result) {
             res.send({ status: "success", payload: result });
           } else {
@@ -65,6 +66,8 @@ class UserController {
         const usrDTO = new UserDTO(user);
         const token = jwt.sign({ usrDTO }, config.tokenPass, {expiresIn: "24h"});
         res.cookie("tokenUsrCookie", token, {maxAge: 60 * 60 * 1000 * 24, httpOnly: true});
+        
+        // se envia user completo en lugar de dto para tener toda la info para testear 
         res.send({ status: "success", payload: user, token: token });
       } else {
         res.send({ status: "error", message: "Contraseña incorrecta" });
