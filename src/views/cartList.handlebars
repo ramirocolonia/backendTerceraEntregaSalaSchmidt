@@ -1,0 +1,16 @@
+{{#if products}}
+  <div>
+      {{#each products}}
+        <div>
+          <h2>Producto: {{this.product.title}} &nbsp; Precio: {{this.product.price}}</h2>
+          <p>Categoría: {{this.product.category}} &nbsp; Código: {{this.product.code}} &nbsp; Cantidad: {{this.quantity}} </p>
+          <p>Descripción: {{this.product.description}}</p>
+        </div>
+        <hr/>
+        <br/>
+      {{/each}}
+  </div>
+  <br/>
+{{else}}
+  <h1>No hay PRODUCTOS para mostrar</h1>
+{{/if}}  
